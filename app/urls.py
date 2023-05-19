@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.urls import path
-from .views import landingview, loginview, login_action, logout_action
+from .views import landingview, loginview, login_action, logout_action, \
+                   chore_type_listview, add_chore_type, confirm_delete_chore_type, delete_chore_type, edit_chore_type_get, edit_chore_type_post
 
 urlpatterns = [
     #Main page
@@ -11,5 +12,17 @@ urlpatterns = [
     path('please_login/', loginview),
     path('login/', login_action),
     path('logout', logout_action),
+
+    #ChoreTypes
+    path('choretypes/', chore_type_listview),
+    path('add-chore-type/', add_chore_type),
+    path('confirm-delete-chore-type/<int:id>/', confirm_delete_chore_type),
+    path('delete-chore-type/<int:id>/', delete_chore_type),
+    path('edit-chore-type-get/<int:id>/', edit_chore_type_get),
+    path('edit-chore-type-post/<int:id>/', edit_chore_type_post),
+
+    #Chores
+
+    #History
 
 ]

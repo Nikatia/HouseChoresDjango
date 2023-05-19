@@ -1,7 +1,73 @@
 {% extends 'index.html' %}
 
 {% block content %}
+<br/>
+<h1 class="display-4">Chore types</h1>
 
-<h1>Welcome to House Chores Django App</h1>
+<button id="add-btn" onclick="showaddform()" class="btn myCornFlowerButton btn-sm">Add new chore type</button>
+
+<div id="chore-type-content">
+
+</div>
+
+<script>
+    let table = `<div id="typestable-div">
+                    {% for t in types %}
+                    <br>
+                    <div class="card myCardBg border-0" >
+                        <div class="card-body">
+                            <h3 class="card-title">{{t.name}}</h3>
+                            <p class="card-body lead">{{t.description}}</p>
+                            
+                            <a href="/confirm-delete-chore-type/{{t.id}}/" class="btn btn-danger btn-sm" style="float: right;">Delete</a>
+                            <a href="/chores-by-type/{{t.id}}/" class="btn myCornFlowerButton btn-sm" style="float: right; margin-right:5px;">Chores</a>
+                            <a href="/edit-chore-type-get/{{t.id}}/" class="btn myCornFlowerButton btn-sm" style="float: right; margin-right:5px;">Edit</a>
+                        </div>
+                    </div>
+    
+                    {% empty %}
+                    <center>
+                        <div class="card" style="width: 20rem; margin-top: 50px;">
+                            <div class="card-body">
+                                <p class="card-text" style="text-align: center;">No chore types saved in the database</p>
+                            </div>
+                        </div>
+                    </center>
+
+                    {%endfor%}
+                </div>`
+    
+    let add = `<div id="add-div">
+                    <h4>New Chore Type</h4>
+
+                    <form method="post" action="/add-chore-type/">
+                        {%csrf_token %}
+                        <div class="form-group">
+                            <label>Type Name</label><br>
+                            <input type="text" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label><br>
+                            <input type="text" name="description">
+                        </div>
+                        <input type="submit" value="Confirm" class="btn myCornFlowerButton btn-sm">
+                        <input type="submit" id="hide-btn" class="btn btn-secondary btn-sm" onclick="showtable()" value="Cancel">
+                    </form>
+                </div>`
+        
+    function showaddform() {
+        document.getElementById("add-btn").style.visibility = "hidden";
+        document.getElementById("chore-type-content").innerHTML = "";
+        document.getElementById("chore-type-content").innerHTML = add;
+    }
+
+    function showtable() {
+        document.getElementById("add-btn").style.visibility = "visible";
+        document.getElementById("chore-type-content").innerHTML = "";
+        document.getElementById("chore-type-content").innerHTML = table;
+    }
+
+    showtable();
+</script>
 
 {% endblock %}

@@ -89,32 +89,9 @@
         {% endif %}
 
         <div class="container">
+            {% block content %}
 
-                
-                <!-- <div name="navbar" class="">
-                    {% if request.user.is_authenticated %}
-                    <div class="btn-group" role="group">
-                        <a class="btn btn-warning btn-sm" href="/suppliers">Manage suppliers</a>
-                        <a class="btn btn-success btn-sm" href="/products">Manage products</a>
-                        <a class="btn btn-info btn-sm" href="http://careeria.fi">Recruit code professionals</a>
-                        <a class="btn btn-primary btn-sm" href="/admin">Admin pages</a>
-                        <a class="btn btn-danger btn-sm" href="/logout">Logout</a>
-                    </div>
-                    {% else %}
-                    <div class="btn-group" role="group">
-                        <a class="btn btn-info btn-sm" href="http://careeria.fi">Recruit code professionals</a>
-                        <a class="btn btn-primary btn-sm" href="/admin">Admin pages</a>
-                    </div>
-                    {% endif %}
-                </div> -->
-                
-                
-                <div name="content">
-                    {% block content %}
-
-                    {% endblock %}
-                </div>
-
+            {% endblock %}
         </div>
     </body>
 </html>
