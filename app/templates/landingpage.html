@@ -1,0 +1,29 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+{% if request.user.is_authenticated %}
+<div class="jumbotron" style="margin-top: 80px;">
+    <h1 class="display-4">Welcome to House Chores Django App!</h1>
+    <p class="lead">In this simple application you will be able to record distribution of house chores in your household.</p>
+    <br />
+    <ul class="lead">
+        <li>In Chore settings you can create new house chore types and assign new chores to already created types</li>
+        <li>In House Chore History you can add finished by you house chores</li>  
+    </ul>
+</div>
+
+{% else %}
+<div class="jumbotron" style="margin-top: 80px;">
+    <h1 class="display-4">Welcome to House Chores Django App!</h1>
+    <p class="lead">In this simple application you will be able to record distribution of house chores in your household.</p>
+    <hr class="my-4">
+    <p>Please, log in to start using the app.</p>
+    <p class="lead">
+      <a class="btn myCornFlowerButton btn-lg" href="/please_login" role="button">Login</a>
+    </p>
+</div>
+
+{% endif %}
+
+{% endblock %}
