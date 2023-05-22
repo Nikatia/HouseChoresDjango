@@ -7,8 +7,17 @@ h1 {
     color: white;
 }
 
+.myCornFlowerButton:hover {
+    background-color: rgb(80, 129, 221);
+    color: white;
+}
+
 .myCardBg {
     background-color: #e9ecef;
 }
 
-tr:hover {background-color: #bbcef0;}
+.chore-table tr:hover {background-color: #bbcef0;}
+
+table {
+    cursor: default;
+}

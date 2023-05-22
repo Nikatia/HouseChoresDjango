@@ -1,0 +1,96 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<br/>
+<h1 class="display-4">Chore Diary</h1>
+
+<button id="add-btn" onclick="showaddform()" class="btn myCornFlowerButton btn-sm">Add new Entry</button>
+
+<div id="chore-type-content">
+    
+
+</div>
+
+<script>
+
+    let table = `<br><div class="card myCardBg border-0">
+                        <div class="card-body">
+                            <table class="container-fluid table-striped">
+                                <thead class="font-weight-bold lead" style="border-bottom: 1px solid black;">
+                                    <td>Date</td>
+                                    <td>Duration</td>
+                                    <td>Chore</td>
+                                    <td>Person</td>
+                                    <td></td>
+                                </thead>
+                                <tbody>
+                                    {% for d in diary %}
+                                        <tr>
+                                            <td>{{d.date}}</td>
+                                            <td>{{d.duration}} min</td>
+                                            <td>{{d.chore.name}}</td>
+                                            <td>{{d.person}}</td>
+                                            <td>
+                                                <a href="/confirm-delete-diary/{{d.id}}/" class="btn btn-danger btn-sm" style="float: right;">Delete</a>
+                                                <a href="/edit-diary-get/{{d.id}}/" class="btn myCornFlowerButton btn-sm" style="float: right; margin-right:5px;">Edit</a>    
+                                            </td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td>No Chore</td>
+                                            <td>Diary Entries</td>
+                                            <td>saved in</td>
+                                            <td>the database</td>
+                                        </tr>
+                                    {%endfor%}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>`
+    
+    let add = `<br>
+    <div class="container-fluid">
+        <div id="add-div">
+            <h4>New Chore Diary Entry</h4>
+
+            <form method="post" action="/add-to-diary/">
+                {%csrf_token %}
+                <div class="form-group">
+                    <label>Date</label><br>
+                    <input type="date" name="date">
+                </div>
+                <div class="form-group">
+                    <label>Duration in minutes</label><br>
+                    <input type="number" name="duration">
+                </div>
+                <div class="form-group">
+                    <label>Chore</label><br>
+                    <select id="chore" name="chore">
+                        {% for ch in chores %}
+                            <option value="{{ch.id}}">{{ch.name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <input type="submit" value="Confirm" class="btn myCornFlowerButton btn-sm">
+                <input type="submit" id="hide-btn" class="btn btn-secondary btn-sm" onclick="showtable()" value="Cancel">
+            </form>
+        </div>
+
+    </div>    `
+        
+    function showaddform() {
+        document.getElementById("add-btn").style.visibility = "hidden";
+        document.getElementById("chore-type-content").innerHTML = "";
+        document.getElementById("chore-type-content").innerHTML = add;
+    }
+
+    function showtable() {
+        document.getElementById("add-btn").style.visibility = "visible";
+        document.getElementById("chore-type-content").innerHTML = "";
+        document.getElementById("chore-type-content").innerHTML = table;
+    }
+
+    showtable();
+</script>
+
+{% endblock %}

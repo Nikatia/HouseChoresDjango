@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from .models import ChoreType, Chore
+from .models import ChoreType, Chore, ChoreDone
+from django.contrib.auth.models import User
+
 
 # Main page
 def landingview(request):
@@ -152,4 +154,66 @@ def chores_of_type(request, id):
         filteredchores = chorelist.filter(type = id)
         context = {'chores': filteredchores, 'type': type}
         return render (request, "categorys_chores.html", context)
+    
 
+#Chore Diary
+def diary_listview(request):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        choresdone = ChoreDone.objects.all()
+        chorelist = Chore.objects.all()
+        context = {'diary': choresdone, 'chores': chorelist}
+        return render(request, 'diary.html', context)
+
+def add_diary_entry(request):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        date = request.POST['date']
+        duration = request.POST['duration']
+        chore = request.POST['chore']
+        who = request.user.id
+
+        ChoreDone(date = date, duration = duration, chore = Chore.objects.get(id = chore), person = User.objects.get(id=who)).save()
+        return redirect(request.META['HTTP_REFERER'])
+
+def confirm_delete_diary_entry(request, id):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        diaryentry = ChoreDone.objects.get(id = id)
+        context = {'entry': diaryentry}
+        return render (request, "confirm_delete_diary_entry.html", context)
+
+def delete_diary_entry(request, id):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        ChoreDone.objects.get(id = id).delete()
+        return redirect(diary_listview)
+    
+def edit_diary_entry_get(request, id):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        entry = ChoreDone.objects.get(id = id)
+        chorelist = Chore.objects.all()
+        users = User.objects.all()
+        context = {'entry': entry, 'chores': chorelist, 'users': users}
+        return render (request, "edit_diary_entry.html", context)
+
+def edit_diary_entry_post(request, id):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        
+        entry = ChoreDone.objects.get(id = id)
+        entry.date = request.POST['date']
+        entry.duration = request.POST['duration']
+        chore = request.POST['chore']
+        entry.chore = Chore.objects.get(id = int(chore))
+        user = request.POST['person']
+        entry.person = User.objects.get(id=user)
+        entry.save()
+        return redirect(diary_listview)

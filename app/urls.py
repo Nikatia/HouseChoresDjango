@@ -2,7 +2,8 @@ from django.contrib import admin
 from django.urls import path
 from .views import landingview, loginview, login_action, logout_action, \
                    chore_type_listview, add_chore_type, confirm_delete_chore_type, delete_chore_type, edit_chore_type_get, edit_chore_type_post, \
-                   chore_listview, add_chore, search_chores, confirm_delete_chore, delete_chore, edit_chore_get, edit_chore_post, chores_of_type
+                   chore_listview, add_chore, search_chores, confirm_delete_chore, delete_chore, edit_chore_get, edit_chore_post, chores_of_type, \
+                   diary_listview, add_diary_entry, confirm_delete_diary_entry, delete_diary_entry, edit_diary_entry_get, edit_diary_entry_post
 
 urlpatterns = [
     #Main page
@@ -30,8 +31,14 @@ urlpatterns = [
     path('delete-chore/<int:id>/', delete_chore),
     path('edit-chore-get/<int:id>/', edit_chore_get),
     path('edit-chore-post/<int:id>/', edit_chore_post),
-    path('category-chores/<int:id>/', chores_of_type)
+    path('category-chores/<int:id>/', chores_of_type),
 
-    #History
+    #History aka Chore Diary
+    path('chore-diary/', diary_listview),
+    path('add-to-diary/', add_diary_entry),
+    path('confirm-delete-diary/<int:id>/', confirm_delete_diary_entry),
+    path('delete-diary-entry/<int:id>/', delete_diary_entry),
+    path('edit-diary-get/<int:id>/', edit_diary_entry_get),
+    path('edit-diary-post/<int:id>/', edit_diary_entry_post)
 
 ]
