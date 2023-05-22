@@ -12,6 +12,16 @@ h1 {
     color: white;
 }
 
+.myDeleteButton {
+    background-color: #ee7681;
+    color: white;
+}
+
+.myDeleteButton:hover {
+    background-color: #e96671;
+    color: white;
+}
+
 .myCardBg {
     background-color: #e9ecef;
 }

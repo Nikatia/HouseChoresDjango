@@ -4,7 +4,7 @@ from .views import landingview, loginview, login_action, logout_action, \
                    chore_type_listview, add_chore_type, confirm_delete_chore_type, delete_chore_type, edit_chore_type_get, edit_chore_type_post, \
                    chore_listview, add_chore, search_chores, confirm_delete_chore, delete_chore, edit_chore_get, edit_chore_post, chores_of_type, \
                    diary_listview, add_diary_entry, confirm_delete_diary_entry, delete_diary_entry, edit_diary_entry_get, edit_diary_entry_post, \
-                   user_listview, add_user, confirm_delete_user, delete_user
+                   user_listview, add_user, confirm_delete_user, delete_user, edit_user_get, edit_user_post
 
 urlpatterns = [
     #Main page
@@ -46,5 +46,7 @@ urlpatterns = [
     path('users/', user_listview),
     path('add-user/', add_user),
     path('confirm-delete-user/<int:id>/', confirm_delete_user),
-    path('delete-user/<int:id>/', delete_user)
+    path('delete-user/<int:id>/', delete_user),
+    path('edit-user-get/<int:id>/', edit_user_get),
+    path('edit-user-post/<int:id>/', edit_user_post)
 ]

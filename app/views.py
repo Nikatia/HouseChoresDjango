@@ -253,3 +253,24 @@ def delete_user(request, id):
     else:
         User.objects.get(id = id).delete()
         return redirect(user_listview)
+    
+def edit_user_get(request, id):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        user = User.objects.get(id = id)
+        context = {'user': user}
+        return render (request, "edit_user.html", context)
+
+def edit_user_post(request, id):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        user = User.objects.get(id = id)
+        user.username = request.POST['username']
+        user.first_name = request.POST['first_name']
+        user.email = request.POST['email']
+        password = request.POST['password']
+        user.set_password(password)
+        user.save()
+        return redirect(user_listview)

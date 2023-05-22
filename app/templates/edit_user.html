@@ -1,0 +1,52 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<br/>
+<h1 class="display-4">Users</h1>
+
+<br/>
+
+<div id="chore-type-content">
+    <div id="edit-div">
+        <h4>Edit User</h4>
+
+        <form method="post" action="/edit-user-post/{{user.id}}/">
+            {%csrf_token %}
+            <div class="form-group">
+                <label>Username</label><br>
+                <input type="text" name="username" value="{{user.username}}">
+            </div>
+            <div class="form-group">
+                <label>First name</label><br>
+                <input type="text" name="first_name" value="{{user.first_name}}">
+            </div>
+            <div class="form-group">
+                <label>Email</label><br>
+                <input type="text" name="email" value="{{user.email}}">
+            </div>
+            <div class="form-group">
+                <label>Password</label><br>
+                <input type="password" name="password" id="passw" value="" oninput="isPassw()"> <span class="text-danger" id="warning">Please enter the password</span>
+            </div>
+            <input type="submit" id="sub-btn" value="Confirm" class="btn myCornFlowerButton btn-sm" disabled="disabled">
+            <input type="button" id="hide-btn" class="btn btn-secondary btn-sm" onclick="window.location.href='/users'" value="Cancel">
+        </form>
+    </div>
+</div>
+
+<script>
+    function isPassw(){
+        var passwordValue = $("#passw").val();
+        if (passwordValue == null || passwordValue == "") {
+            $("#sub-btn").prop('disabled', true);
+            $("#warning").show();
+        }
+        else {
+            $("#sub-btn").prop('disabled', false);
+            $("#warning").hide();
+        }
+        
+    }
+</script>
+
+{% endblock %}
