@@ -10,3 +10,5 @@ h1 {
 .myCardBg {
     background-color: #e9ecef;
 }
+
+tr:hover {background-color: #bbcef0;}

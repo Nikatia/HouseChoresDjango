@@ -2,48 +2,55 @@
 
 {% block content %}
 <br/>
-<h1 class="display-4">Chore types</h1>
+<h1 class="display-4">Chore Categories</h1>
 
-<button id="add-btn" onclick="showaddform()" class="btn myCornFlowerButton btn-sm">Add new chore type</button>
+<button id="add-btn" onclick="showaddform()" class="btn myCornFlowerButton btn-sm">Add new Category</button>
 
 <div id="chore-type-content">
 
 </div>
 
 <script>
-    let table = `<div id="typestable-div">
-                    {% for t in types %}
-                    <br>
-                    <div class="card myCardBg border-0" >
-                        <div class="card-body">
-                            <h3 class="card-title">{{t.name}}</h3>
-                            <p class="card-body lead">{{t.description}}</p>
-                            
-                            <a href="/confirm-delete-chore-type/{{t.id}}/" class="btn btn-danger btn-sm" style="float: right;">Delete</a>
-                            <a href="/chores-by-type/{{t.id}}/" class="btn myCornFlowerButton btn-sm" style="float: right; margin-right:5px;">Chores</a>
-                            <a href="/edit-chore-type-get/{{t.id}}/" class="btn myCornFlowerButton btn-sm" style="float: right; margin-right:5px;">Edit</a>
-                        </div>
-                    </div>
-    
-                    {% empty %}
-                    <center>
-                        <div class="card" style="width: 20rem; margin-top: 50px;">
-                            <div class="card-body">
-                                <p class="card-text" style="text-align: center;">No chore types saved in the database</p>
-                            </div>
-                        </div>
-                    </center>
 
-                    {%endfor%}
+    let table = `<br><div class="container-fluid">
+                    <div class="row g-1">
+                        {% for t in types %}
+                            <div class="col-md-6" style="margin-bottom: 20px;">
+                                <div class="card myCardBg border-0" style="height:100%" >
+                                    <div class="card-body">
+                                        <h3 class="card-title">{{t.name}}</h3>
+                                        <p class="card-body lead">{{t.description}}</p>
+                                        
+                                        
+                                    </div>
+                                    <div class="card-footer bg-transparent border-0">
+                                        <a href="/confirm-delete-chore-type/{{t.id}}/" class="btn btn-danger btn-sm" style="float: right;">Delete</a>
+                                        <a href="/category-chores/{{t.id}}/" class="btn myCornFlowerButton btn-sm" style="float: right; margin-right:5px;">Chores</a>
+                                        <a href="/edit-chore-type-get/{{t.id}}/" class="btn myCornFlowerButton btn-sm" style="float: right; margin-right:5px;">Edit</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        {% empty %}
+                            <center>
+                                <div class="card" style="width: 20rem; margin-top: 50px;">
+                                    <div class="card-body">
+                                        <p class="card-text" style="text-align: center;">No chore categories saved in the database</p>
+                                    </div>
+                                </div>
+                            </center>
+                        {%endfor%}
+
+                    </div>
                 </div>`
     
     let add = `<div id="add-div">
-                    <h4>New Chore Type</h4>
+                    <h4>New Chore Category</h4>
 
                     <form method="post" action="/add-chore-type/">
                         {%csrf_token %}
                         <div class="form-group">
-                            <label>Type Name</label><br>
+                            <label>Category Name</label><br>
                             <input type="text" name="name">
                         </div>
                         <div class="form-group">

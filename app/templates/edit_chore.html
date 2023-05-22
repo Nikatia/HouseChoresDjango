@@ -1,0 +1,33 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<br/>
+<h1 class="display-4">Chore</h1>
+
+<br/>
+
+<div id="chore-content">
+    <div id="edit-div">
+        <h4>Edit Chore</h4>
+
+        <form method="post" action="/edit-chore-post/{{chore.id}}/">
+            {%csrf_token %}
+            <div class="form-group">
+                <label>Chore Name</label><br>
+                <input type="text" name="name" value="{{chore.name}}">
+            </div>
+            <div class="form-group">
+                <label>Category</label><br>
+                <select id="type" name="type">
+                    {% for t in types %}
+                        <option value="{{t.id}}">{{t.name}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <input type="submit" value="Confirm" class="btn myCornFlowerButton btn-sm">
+            <input type="button" id="hide-btn" class="btn btn-secondary btn-sm" onclick="window.location.href='/chores'" value="Cancel">
+        </form>
+    </div>
+</div>
+
+{% endblock %}

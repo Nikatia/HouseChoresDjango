@@ -1,0 +1,38 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<br/>
+<h1 class="display-4">Chore Categories</h1>
+<br/>
+<div id="chore-type-content">
+    <div id="remove-div">
+        <h4>Delete Category</h4>
+
+        <p class="lead">Are you sure you want to remove this Category?</p>
+        <br/>
+        <div class="card myCardBg border-0" >
+            <div class="card-body">
+                <h3 class="card-title">{{type.name}}</h3>
+                <p class="card-body lead">{{type.description}}</p>
+                <br>
+
+                <p>This operation will set all listed below chores to have no category:</p>
+                <ul>
+                    {% for ch in chores %}
+                        {% if ch.type.id == type.id %}
+                            <li>{{ch.name}}</li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+
+            </div>
+        </div>    
+
+        <br>
+        <a href="/delete-chore-type/{{type.id}}/" class="btn btn-danger">Delete</a>
+        <button onclick="window.location.href='/choretypes'" class="btn btn-secondary">Cancel</a>
+
+    </div>
+</div>
+
+{% endblock %}

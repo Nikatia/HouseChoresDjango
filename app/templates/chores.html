@@ -1,0 +1,95 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<br/>
+<h1 class="display-4">Chores</h1>
+
+<div class="container-fluid" id="add-and-search">
+    <div class="row g-1">
+        <div class="col-md-8">
+            <button onclick="showaddform()" class="btn myCornFlowerButton btn-sm">Add new chore</button>
+        </div>
+        <div class="col-md-4">
+            <form method="post" action="/search-chores/" style="float: right;">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    <input class="form-control" style="height: 31px" type="text" placeholder="search" name="search">
+                    
+                    <div class="input-group-append">
+                        <button type="submit" class="btn myCornFlowerButton btn-sm" name="">Search</button>   
+                    </div>
+                </div>  
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div id="chore-content">
+    
+</div>
+
+<script>
+    let table = `
+                <div class="container-fluid">
+                    {% for t in types %}
+                        <br>
+                        <div class="card myCardBg border-0" >
+                            <div class="card-body">
+                                <h3 class="card-title">{{t.name}}</h3>
+                                <table class="container-fluid">
+                                    {% for ch in chores %}
+                                        {% if ch.type.id == t.id%}
+                                        <tr>
+                                            <td>{{ch.name}}</td>
+                                            <td>
+                                                <a href="/confirm-delete-chore/{{ch.id}}/" class="btn btn-danger btn-sm" style="float: right;">Delete</a>
+                                                <a href="/edit-chore-get/{{ch.id}}/" class="btn myCornFlowerButton btn-sm" style="float: right; margin-right:5px;">Edit</a>
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                    {% endfor %}
+                                </table>
+                            </div>
+                        </div>
+                    {%endfor%}
+                </div>`
+    
+    let add = `<div id="add-div">
+                    <h4>New Chore</h4>
+
+                    <form method="post" action="/add-chore/">
+                        {%csrf_token %}
+                        <div class="form-group">
+                            <label>Chore Name</label><br>
+                            <input type="text" name="name">
+                        </div>
+                        <div class="form-group">
+                            <label>Type</label><br>
+                            <select id="type" name="type">
+                                {% for t in types %}
+                                    <option value="{{t.id}}">{{t.name}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <input type="submit" value="Confirm" class="btn myCornFlowerButton btn-sm">
+                        <input type="submit" id="hide-btn" class="btn btn-secondary btn-sm" onclick="showtable()" value="Cancel">
+                    </form>
+                </div>`
+        
+    function showaddform() {
+        document.getElementById("add-and-search").style.visibility = "hidden";
+        document.getElementById("chore-content").innerHTML = "";
+        document.getElementById("chore-content").innerHTML = add;
+    }
+
+    function showtable() {
+        document.getElementById("add-and-search").style.visibility = "visible";
+        document.getElementById("chore-content").innerHTML = "";
+        document.getElementById("chore-content").innerHTML = table;
+    }
+
+    showtable();
+</script>
+
+{% endblock %}
