@@ -1,0 +1,94 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<br/>
+<h1 class="display-4">Users</h1>
+
+<button id="add-btn" onclick="showaddform()" class="btn myCornFlowerButton btn-sm">Add new User</button>
+
+<div id="user-content">
+    
+
+</div>
+
+<script>
+
+    let table = `<br><div class="card myCardBg border-0">
+                        <div class="card-body">
+                            <table class="container-fluid table-striped">
+                                <thead class="font-weight-bold lead" style="border-bottom: 1px solid black;">
+                                    <td>Username</td>
+                                    <td>First Name</td>
+                                    <td>Email</td>
+                                    <td></td>
+                                </thead>
+                                <tbody>
+                                    {% for u in users %}
+                                        <tr>
+                                            <td>{{u.username}}</td>
+                                            <td>{{u.first_name}}</td>
+                                            <td>{{u.email}}</td>
+                                            <td>
+                                                <a href="/confirm-delete-user/{{u.id}}/" class="btn btn-danger btn-sm" style="float: right;">Delete</a>
+                                                <a href="/edit-user-get/{{u.id}}/" class="btn myCornFlowerButton btn-sm" style="float: right; margin-right:5px;">Edit</a>    
+                                            </td>
+                                        </tr>
+                                    {% empty %}
+                                        <tr>
+                                            <td>No</td>
+                                            <td>Users</td>
+                                            <td>saved in</td>
+                                            <td>the database</td>
+                                        </tr>
+                                    {%endfor%}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>`
+    
+    let add = `<br>
+    <div class="container-fluid">
+        <div id="add-div">
+            <h4>New User</h4>
+
+            <form method="post" action="/add-user/">
+                {%csrf_token %}
+                <div class="form-group">
+                    <label>Username</label><br>
+                    <input type="text" name="username">
+                </div>
+                <div class="form-group">
+                    <label>First Name</label><br>
+                    <input type="text" name="first_name">
+                </div>
+                <div class="form-group">
+                    <label>Email</label><br>
+                    <input type="text" name="email">
+                </div>
+                <div class="form-group">
+                    <label>Password</label><br>
+                    <input type="password" name="password">
+                </div>
+                <input type="submit" value="Confirm" class="btn myCornFlowerButton btn-sm">
+                <input type="submit" id="hide-btn" class="btn btn-secondary btn-sm" onclick="showtable()" value="Cancel">
+            </form>
+        </div>
+
+    </div>    `
+        
+    function showaddform() {
+        document.getElementById("add-btn").style.visibility = "hidden";
+        document.getElementById("user-content").innerHTML = "";
+        document.getElementById("user-content").innerHTML = add;
+    }
+
+    function showtable() {
+        document.getElementById("add-btn").style.visibility = "visible";
+        document.getElementById("user-content").innerHTML = "";
+        document.getElementById("user-content").innerHTML = table;
+    }
+
+    showtable();
+</script>
+
+{% endblock %}

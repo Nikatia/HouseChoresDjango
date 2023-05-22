@@ -217,3 +217,39 @@ def edit_diary_entry_post(request, id):
         entry.person = User.objects.get(id=user)
         entry.save()
         return redirect(diary_listview)
+
+#Users
+def user_listview(request):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        users = User.objects.all()
+        context = {'users': users}
+        return render(request, 'users.html', context)
+    
+def add_user(request):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        username = request.POST['username']
+        name = request.POST['first_name']
+        email = request.POST['email']
+        password = request.POST['password']
+        user = User.objects.create_user(username = username, first_name = name, email=email, password=password)
+        user.save()
+        return redirect(request.META['HTTP_REFERER'])
+
+def confirm_delete_user(request, id):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        user = User.objects.get(id = id)
+        context = {'user': user}
+        return render (request, "confirm_delete_user.html", context)
+
+def delete_user(request, id):
+    if not request.user.is_authenticated:
+        return render(request, 'loginpage.html')
+    else:
+        User.objects.get(id = id).delete()
+        return redirect(user_listview)

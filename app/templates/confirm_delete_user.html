@@ -1,0 +1,30 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<br/>
+<h1 class="display-4">Users</h1>
+<br/>
+<div id="chore-content">
+    <div id="remove-div">
+        <h4>Delete User</h4>
+
+        <p class="lead">Are you sure you want to remove this user?</p>
+        <br/>
+        <div class="card myCardBg border-0" >
+            <div class="card-body">
+                <h3 class="card-title">{{user.username}}</h3>
+                    <ul class="card-body lead">
+                        <li><b>First Name:</b> {{user.first_name}}</li>
+                        <li><b>email:</b> {{user.email}}</li>
+                    </ul>
+            </div>
+        </div>    
+
+        <br>
+        <a href="/delete-user/{{user.id}}/" class="btn btn-danger">Delete</a>
+        <button onclick="window.location.href='/users'" class="btn btn-secondary">Cancel</a>
+
+    </div>
+</div>
+
+{% endblock %}
