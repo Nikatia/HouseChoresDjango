@@ -1,0 +1,139 @@
+{% extends 'index.html' %}
+
+{% block content %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js"></script>
+
+<br/>
+<h1 class="display-4">Statistics</h1>
+
+<div class="container-fluid">
+    <br/>
+    <h3>Activity</h4>
+    <br/>
+
+    <div class="row g-1">
+
+        <div class="chart-container col-md-6" style="position: relative; height:35vh; width:80vwp; padding-left: 10%;">
+            <canvas id="chart"></canvas>
+        </div>
+
+        <div class="card myCardBg border-0 col-md-6" style="margin-top: auto; margin-bottom: auto;">
+            <br/>
+            <h4 class="card-title">Time spent for doing house chores by user:</h4>
+            <div class="card-body">
+                <ul>
+                    {% for a in activity %}
+                    <li class="lead activityOfUsers" onload="addValues('{{a.user}}', '{{a.activity}}')">
+                        <div class="row ml-2">
+                            <div class="col-md-3">
+                                <b>{{a.user}}:</b>
+                            </div>
+                            <div class="col-md-9">
+                                {{a.activity}} min
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    <br>
+    <div class="chart-container" style="height:35vh; width:100%">
+        <canvas id="barChart" data-url="{% url 'category-chart' %}"></canvas>
+    </div>
+</div>
+
+
+<script language="JavaScript">
+
+    let userLabels = []
+    let actData = []
+
+    $(function(){
+	$('li[onload]').trigger('onload');
+    });
+
+    function addValues(user, activity) {
+        userLabels.push('"' + user + '"')
+        actData.push(activity)
+    }
+
+    $(function () {
+            setTimeout(() => {
+                let ctx = document.getElementById("chart").getContext("2d")
+
+                let chart = new Chart(ctx, {
+                type: "pie",
+                data: {
+                    labels: userLabels,
+                    datasets: [
+                        {
+                        label: "Minutes spent on doing house chores",
+                        data: actData,
+                        borderColor: 'white',
+                        backgroundColor: ['rgb(100, 149, 237)',
+                            'rgb(90, 139, 228)',
+                            'rgb(80, 129, 221)',
+                            'rgb(75, 120, 215)',
+                            'rgb(70, 115, 210)',
+                            'rgb(65, 110, 205)'],
+                        fill: true,
+                        borderWidth: 3
+                        }
+                    ]
+                },
+                options: {
+                    maintainAspectRatio: true,
+                    title: {
+                        text: "Gross Volume in 2020",
+                        display: true
+                    }
+                }
+                });
+
+            }, 800);
+        }
+    );
+
+    $(function () {
+        var $categoryChart = $("#barChart");
+
+        $.ajax({
+            url: $categoryChart.data("url"),
+            success: function (data) {
+
+                var ctx = $categoryChart[0].getContext("2d");
+
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                        label: 'The sum of time spent on household chores in a given category in hours',
+                        backgroundColor: 'rgb(100, 149, 237)',
+                        data: data.data
+                        }]          
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        legend: {
+                        position: 'top',
+                        },
+                        title: {
+                        display: true,
+                        text: 'Category Bar Chart'
+                        }
+                    }
+                });
+            }
+        });
+
+    });
+
+    
+</script>
+
+{% endblock %}

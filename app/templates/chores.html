@@ -28,6 +28,7 @@
 <div id="chore-content">
     
 </div>
+<br/>
 
 <script>
     let table = `
@@ -56,25 +57,28 @@
                 </div>`
     
     let add = `<div id="add-div">
-                    <h4>New Chore</h4>
-
-                    <form method="post" action="/add-chore/">
-                        {%csrf_token %}
-                        <div class="form-group">
-                            <label>Chore Name</label><br>
-                            <input type="text" name="name">
-                        </div>
-                        <div class="form-group">
-                            <label>Type</label><br>
-                            <select id="type" name="type">
-                                {% for t in types %}
-                                    <option value="{{t.id}}">{{t.name}}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                        <input type="submit" value="Confirm" class="btn myCornFlowerButton btn-sm">
-                        <input type="submit" id="hide-btn" class="btn btn-secondary btn-sm" onclick="showtable()" value="Cancel">
-                    </form>
+                <h4>New Chore</h4>
+                <div class="card myCardBg border-0 col-md-5" >
+                    <div class="card-body">
+                        <form method="post" action="/add-chore/">
+                            {%csrf_token %}
+                            <div class="form-group">
+                                <label>Chore Name</label><br>
+                                <input type="text" name="name" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <label>Type</label><br>
+                                <select id="type" name="type" class="form-control">
+                                    {% for t in types %}
+                                        <option value="{{t.id}}">{{t.name}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="text-center">
+                                <input type="submit" value="Confirm" class="btn myCornFlowerButton btn-sm">
+                                <input type="submit" id="hide-btn" class="btn btn-secondary btn-sm" onclick="showtable()" value="Cancel">
+                            </div>
+                        </form>
                 </div>`
         
     function showaddform() {

@@ -40,26 +40,32 @@
                                 </div>
                             </center>
                         {%endfor%}
-
                     </div>
                 </div>`
     
-    let add = `<div id="add-div">
-                    <h4>New Chore Category</h4>
-
-                    <form method="post" action="/add-chore-type/">
-                        {%csrf_token %}
-                        <div class="form-group">
-                            <label>Category Name</label><br>
-                            <input type="text" name="name">
+    let add = `<div class="container-fluid">
+                    <div id="add-div">
+                        <h4>New Chore Category</h4>
+                        <div class="card myCardBg border-0 col-md-5" >
+                            <div class="card-body">
+                                <form method="post" action="/add-chore-type/">
+                                    {%csrf_token %}
+                                    <div class="form-group">
+                                        <label>Category Name</label><br>
+                                        <input type="text" name="name" class="form-control" maxlength="45">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Description</label><br>
+                                        <textarea name="description" class="form-control" rows="8" maxlength="300"></textarea>
+                                    </div>
+                                    <div class="text-center">
+                                        <input type="submit" value="Confirm" class="btn myCornFlowerButton btn-sm">
+                                        <input type="submit" id="hide-btn" class="btn btn-secondary btn-sm" onclick="showtable()" value="Cancel">
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Description</label><br>
-                            <input type="text" name="description">
-                        </div>
-                        <input type="submit" value="Confirm" class="btn myCornFlowerButton btn-sm">
-                        <input type="submit" id="hide-btn" class="btn btn-secondary btn-sm" onclick="showtable()" value="Cancel">
-                    </form>
+                    </div>
                 </div>`
         
     function showaddform() {

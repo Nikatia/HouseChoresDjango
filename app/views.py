@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from .models import ChoreType, Chore, ChoreDone
 from django.contrib.auth.models import User
-
+from django.http import JsonResponse
 
 # Main page
 def landingview(request):
@@ -222,6 +222,8 @@ def edit_diary_entry_post(request, id):
 def user_listview(request):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
+    elif not request.user.is_superuser:
+        return render(request, 'landingpage.html')
     else:
         users = User.objects.all()
         context = {'users': users}
@@ -230,6 +232,8 @@ def user_listview(request):
 def add_user(request):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
+    elif not request.user.is_superuser:
+        return render(request, 'landingpage.html')
     else:
         username = request.POST['username']
         name = request.POST['first_name']
@@ -242,6 +246,8 @@ def add_user(request):
 def confirm_delete_user(request, id):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
+    elif not request.user.is_superuser:
+        return render(request, 'landingpage.html')
     else:
         user = User.objects.get(id = id)
         context = {'user': user}
@@ -250,6 +256,8 @@ def confirm_delete_user(request, id):
 def delete_user(request, id):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
+    elif not request.user.is_superuser:
+        return render(request, 'landingpage.html')
     else:
         User.objects.get(id = id).delete()
         return redirect(user_listview)
@@ -257,6 +265,8 @@ def delete_user(request, id):
 def edit_user_get(request, id):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
+    elif not request.user.is_superuser:
+        return render(request, 'landingpage.html')
     else:
         user = User.objects.get(id = id)
         context = {'user': user}
@@ -265,6 +275,8 @@ def edit_user_get(request, id):
 def edit_user_post(request, id):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
+    elif not request.user.is_superuser:
+        return render(request, 'landingpage.html')
     else:
         user = User.objects.get(id = id)
         user.username = request.POST['username']
@@ -274,3 +286,48 @@ def edit_user_post(request, id):
         user.set_password(password)
         user.save()
         return redirect(user_listview)
+    
+
+#Statistics   
+def get_entries(request):
+    user_activity = []
+    for user in User.objects.all():
+        user_hours = 0
+        for entry in ChoreDone.objects.all():
+            if entry.person.id == user.id:
+                user_hours = user_hours + entry.duration
+        user_activity.append({'user':user.username, 'activity': user_hours})
+    
+    context = {'activity':user_activity}
+    return render(request, 'statistics.html', context)
+
+def category_chart(request):
+    labels = []
+    data = []
+    for type in ChoreType.objects.all():
+        typeName = type.name
+        labels.append(typeName)
+
+        typeTime = 0
+        print(typeName, ": ", typeTime)
+        for chore in Chore.objects.all():
+            print(typeName, ": ", type.id, " vs ", chore.type.id)
+            if type.id == chore.type.id:
+                print("SAME")
+                for entry in ChoreDone.objects.all():
+                    if entry.chore.id == chore.id:
+                        print(typeTime, ' + ', entry.duration, " =")
+                        typeTime = typeTime + entry.duration
+                        print(typeTime)
+        if typeTime == 0:
+            typeTime = 0
+        else:
+            typeTime = int(typeTime/60)
+        data.append(typeTime)
+    
+    return JsonResponse(data={
+        'labels': labels,
+        'data': data,
+    })
+
+

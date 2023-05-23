@@ -16,11 +16,11 @@
                 <p class="card-body lead">{{type.description}}</p>
                 <br>
 
-                <p>This operation will set all listed below chores to have no category:</p>
-                <ul>
+                <p><b>This operation will set all listed below chores to have no category:</b></p>
+                <ul class="row">
                     {% for ch in chores %}
                         {% if ch.type.id == type.id %}
-                            <li>{{ch.name}}</li>
+                            <li class="col-md-6">{{ch.name}}</li>
                         {% endif %}
                     {% endfor %}
                 </ul>

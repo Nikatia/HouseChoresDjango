@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 import datetime
 
 class ChoreType(models.Model):
-    name = models.CharField(max_length=100, default='')
+    name = models.CharField(max_length=45, default='')
     description = models.CharField(max_length=300, default='')
 
 class Chore(models.Model):

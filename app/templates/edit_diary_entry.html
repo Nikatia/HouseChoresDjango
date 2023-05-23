@@ -10,35 +10,45 @@
     <div id="edit-div">
         <h4>Edit Diary Entry</h4>
 
-        <form method="post" action="/edit-diary-post/{{entry.id}}/">
-            {%csrf_token %}
-            <div class="form-group">
-                <label>Date</label><br>
-                <input type="date" name="date" value="{{entry.date|date:"Y-m-d"}}">
+        <div class="card myCardBg border-0 col-md-5" >
+            <div class="card-body">
+                <form method="post" action="/edit-diary-post/{{entry.id}}/">
+                    {%csrf_token %}
+
+                    <div class="form-group">
+                        <label>Date</label><br>
+                        <input type="date" name="date" class="form-control" value="{{entry.date|date:'Y-m-d'}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Duration in minutes</label><br>
+                        <input type="number" name="duration" class="form-control" value="{{entry.duration}}">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Chore</label><br>
+                        <select name="chore" class="form-control">
+                            {% for ch in chores %}
+                                <option value="{{ ch.id }}"{% if ch.id is entry.chore.id %} selected="selected"{% endif %}>{{ ch.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Person</label><br>
+                        <select id="person" name="person" class="form-control">
+                            {% for u in users %}
+                                <option value="{{u.id}}"{% if u.id is entry.person.id %} selected="selected"{% endif %}>{{u.username}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="text-center">
+                        <input type="submit" value="Confirm" class="btn myCornFlowerButton btn-sm">
+                        <input type="button" id="hide-btn" class="btn btn-secondary btn-sm" onclick="window.location.href='/chore-diary'" value="Cancel">
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label>Duration in minutes</label><br>
-                <input type="number" name="duration" value="{{entry.duration}}">
-            </div>
-            <div class="form-group">
-                <label>Chore</label><br>
-                <select name="chore">
-                    {% for ch in chores %}
-                        <option value="{{ ch.id }}"{% if ch.id == entry.chore.id %} selected="selected"{% endif %}>{{ ch.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Person</label><br>
-                <select id="person" name="person">
-                    {% for u in users %}
-                        <option value="{{u.id}}"{% if u.id == entry.person.id %} selected="selected"{% endif %}>{{u.username}}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <input type="submit" value="Confirm" class="btn myCornFlowerButton btn-sm">
-            <input type="button" id="hide-btn" class="btn btn-secondary btn-sm" onclick="window.location.href='/chore-diary'" value="Cancel">
-        </form>
+        </div>
     </div>
 </div>
 

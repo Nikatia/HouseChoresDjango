@@ -10,23 +10,29 @@
     <div id="edit-div">
         <h4>Edit Chore</h4>
 
-        <form method="post" action="/edit-chore-post/{{chore.id}}/">
-            {%csrf_token %}
-            <div class="form-group">
-                <label>Chore Name</label><br>
-                <input type="text" name="name" value="{{chore.name}}">
+        <div class="card myCardBg border-0 col-md-5" >
+            <div class="card-body">
+                <form method="post" action="/edit-chore-post/{{chore.id}}/">
+                    {%csrf_token %}
+                    <div class="form-group">
+                        <label>Chore Name</label><br>
+                        <input type="text" name="name" value="{{chore.name}}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label>Category</label><br>
+                        <select name="type" class="form-control">
+                            {% for t in types %}
+                                <option value="{{t.id}}"{% if t.id is chore.type.id %} selected="selected"{% endif %}>{{ t.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="text-center">
+                        <input type="submit" value="Confirm" class="btn myCornFlowerButton btn-sm">
+                        <input type="button" id="hide-btn" class="btn btn-secondary btn-sm" onclick="window.location.href='/chores'" value="Cancel">
+                    </div>
+                </form>
             </div>
-            <div class="form-group">
-                <label>Category</label><br>
-                <select name="type">
-                    {% for t in types %}
-                        <option value="{{t.id}}"{% if t.id == chore.type.id %} selected="selected"{% endif %}>{{ t.name }}</option>
-                    {% endfor %}
-                </select>
-            </div>
-            <input type="submit" value="Confirm" class="btn myCornFlowerButton btn-sm">
-            <input type="button" id="hide-btn" class="btn btn-secondary btn-sm" onclick="window.location.href='/chores'" value="Cancel">
-        </form>
+        </div> 
     </div>
 </div>
 
