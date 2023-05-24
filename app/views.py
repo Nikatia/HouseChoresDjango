@@ -8,6 +8,7 @@ from django.http import JsonResponse
 def landingview(request):
     return render(request, 'landingpage.html')
 
+
 #Login
 def loginview(request):
     return render (request, "loginpage.html")
@@ -28,15 +29,17 @@ def logout_action(request):
     return render(request, 'leavingpage.html')
 
 
-#ChoreTypes
+#CHORE TYPES
+#main
 def chore_type_listview(request):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
     else:
-        choretypelist = ChoreType.objects.all()
+        choretypelist = ChoreType.objects.all().order_by('name')
         context = {'types': choretypelist}
         return render(request, 'choretypes.html', context)
 
+#add
 def add_chore_type(request):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
@@ -46,6 +49,7 @@ def add_chore_type(request):
         ChoreType(name = name, description = desc).save()
         return redirect(request.META['HTTP_REFERER'])
 
+#delete
 def confirm_delete_chore_type(request, id):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
@@ -62,6 +66,7 @@ def delete_chore_type(request, id):
         ChoreType.objects.get(id = id).delete()
         return redirect(chore_type_listview)
 
+#edit
 def edit_chore_type_get(request, id):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
@@ -81,26 +86,29 @@ def edit_chore_type_post(request, id):
         return redirect(chore_type_listview)
 
 
-#Chores
+#CHORES
+#main
 def chore_listview(request):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
     else:
-        chorelist = Chore.objects.all()
-        choretypelist = ChoreType.objects.all()
+        chorelist = Chore.objects.all().order_by('name')
+        choretypelist = ChoreType.objects.all().order_by('name')
         context = {'chores': chorelist, 'types': choretypelist}
         return render(request, 'chores.html', context)
 
+#search
 def search_chores(request):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
     else:
         search = request.POST['search']
-        filtered = Chore.objects.filter(name__icontains=search)
-        choretypelist = ChoreType.objects.all()
+        filtered = Chore.objects.filter(name__icontains=search).order_by('name')
+        choretypelist = ChoreType.objects.all().order_by('name')
         context = {'chores': filtered, 'types': choretypelist}
         return render (request, "chores.html", context)
 
+#add
 def add_chore(request):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
@@ -110,6 +118,7 @@ def add_chore(request):
         Chore(name = name, type = ChoreType.objects.get(id = type)).save()
         return redirect(request.META['HTTP_REFERER'])
 
+#delete
 def confirm_delete_chore(request, id):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
@@ -124,13 +133,14 @@ def delete_chore(request, id):
     else:
         Chore.objects.get(id = id).delete()
         return redirect(chore_listview)
-    
+
+#edit    
 def edit_chore_get(request, id):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
     else:
         chore = Chore.objects.get(id = id)
-        choretypelist = ChoreType.objects.all()
+        choretypelist = ChoreType.objects.all().order_by('name')
         context = {'chore': chore, 'types': choretypelist}
         return render (request, "edit_chore.html", context)
 
@@ -145,27 +155,30 @@ def edit_chore_post(request, id):
         chore.save()
         return redirect(chore_listview)
 
+#list of chores, that belong to given category(type)'s id
 def chores_of_type(request, id):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
     else:
         type = ChoreType.objects.get(id = id)
-        chorelist = Chore.objects.all()
+        chorelist = Chore.objects.all().order_by('name')
         filteredchores = chorelist.filter(type = id)
         context = {'chores': filteredchores, 'type': type}
         return render (request, "categorys_chores.html", context)
     
 
-#Chore Diary
+#CHORE DIARY
+#main
 def diary_listview(request):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
     else:
-        choresdone = ChoreDone.objects.all()
-        chorelist = Chore.objects.all()
+        choresdone = ChoreDone.objects.all().order_by('-date')
+        chorelist = Chore.objects.all().order_by('name')
         context = {'diary': choresdone, 'chores': chorelist}
         return render(request, 'diary.html', context)
 
+#add
 def add_diary_entry(request):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
@@ -178,6 +191,7 @@ def add_diary_entry(request):
         ChoreDone(date = date, duration = duration, chore = Chore.objects.get(id = chore), person = User.objects.get(id=who)).save()
         return redirect(request.META['HTTP_REFERER'])
 
+#delete
 def confirm_delete_diary_entry(request, id):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
@@ -192,14 +206,15 @@ def delete_diary_entry(request, id):
     else:
         ChoreDone.objects.get(id = id).delete()
         return redirect(diary_listview)
-    
+
+#edit 
 def edit_diary_entry_get(request, id):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
     else:
         entry = ChoreDone.objects.get(id = id)
-        chorelist = Chore.objects.all()
-        users = User.objects.all()
+        chorelist = Chore.objects.all().order_by('name')
+        users = User.objects.all().order_by('username')
         context = {'entry': entry, 'chores': chorelist, 'users': users}
         return render (request, "edit_diary_entry.html", context)
 
@@ -218,17 +233,20 @@ def edit_diary_entry_post(request, id):
         entry.save()
         return redirect(diary_listview)
 
-#Users
+
+#USERS - access only for superusers
+#main
 def user_listview(request):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
     elif not request.user.is_superuser:
         return render(request, 'landingpage.html')
     else:
-        users = User.objects.all()
+        users = User.objects.all().order_by('username')
         context = {'users': users}
         return render(request, 'users.html', context)
-    
+
+#add
 def add_user(request):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
@@ -243,6 +261,7 @@ def add_user(request):
         user.save()
         return redirect(request.META['HTTP_REFERER'])
 
+#delete
 def confirm_delete_user(request, id):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
@@ -261,7 +280,8 @@ def delete_user(request, id):
     else:
         User.objects.get(id = id).delete()
         return redirect(user_listview)
-    
+
+#edit   
 def edit_user_get(request, id):
     if not request.user.is_authenticated:
         return render(request, 'loginpage.html')
@@ -288,7 +308,8 @@ def edit_user_post(request, id):
         return redirect(user_listview)
     
 
-#Statistics   
+#STATISTICS
+#main - includes data for pie chart with user activity  
 def get_entries(request):
     user_activity = []
     for user in User.objects.all():
@@ -301,6 +322,7 @@ def get_entries(request):
     context = {'activity':user_activity}
     return render(request, 'statistics.html', context)
 
+#data for category bar chart
 def category_chart(request):
     labels = []
     data = []
@@ -309,16 +331,11 @@ def category_chart(request):
         labels.append(typeName)
 
         typeTime = 0
-        print(typeName, ": ", typeTime)
         for chore in Chore.objects.all():
-            print(typeName, ": ", type.id, " vs ", chore.type.id)
             if type.id == chore.type.id:
-                print("SAME")
                 for entry in ChoreDone.objects.all():
                     if entry.chore.id == chore.id:
-                        print(typeTime, ' + ', entry.duration, " =")
                         typeTime = typeTime + entry.duration
-                        print(typeTime)
         if typeTime == 0:
             typeTime = 0
         else:

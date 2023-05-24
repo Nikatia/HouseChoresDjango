@@ -51,15 +51,18 @@
     let userLabels = []
     let actData = []
 
+    // Triggering onloads in li objects
     $(function(){
-	$('li[onload]').trigger('onload');
+	    $('li[onload]').trigger('onload');
     });
 
+    //adding data for pie chart (with user's activity)
     function addValues(user, activity) {
         userLabels.push('"' + user + '"')
         actData.push(activity)
     }
 
+    //Pie chart with User's Activity
     $(function () {
             setTimeout(() => {
                 let ctx = document.getElementById("chart").getContext("2d")
@@ -87,7 +90,7 @@
                 options: {
                     maintainAspectRatio: true,
                     title: {
-                        text: "Gross Volume in 2020",
+                        text: "User's activity",
                         display: true
                     }
                 }
@@ -97,6 +100,7 @@
         }
     );
 
+    //Category Bar Chart, that gets data from category_chart view through json -> ajax
     $(function () {
         var $categoryChart = $("#barChart");
 
